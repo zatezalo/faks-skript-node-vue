@@ -26,7 +26,7 @@
 
             <div v-bind:key="comment.id" v-for="comment in comments">
                 <div class="card-header">
-                    <a>ko je napravio kom komentara{{comment.userId}}</a>
+                    <a>Commented by : {{comment.userId}}</a>
                 </div>
                 <div class="card mb-3">
                     <div class="card-body">
@@ -57,7 +57,7 @@ export default {
             post: {},
             comments: [],
             form: {
-                userId: 1,
+                userId: this.$store.state.user.id,
                 postId: this.$route.params.id,
                 description: null
             }

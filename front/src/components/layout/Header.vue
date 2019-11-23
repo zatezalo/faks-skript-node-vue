@@ -18,17 +18,22 @@
                 <a class="nav-link" href="/about">About</a>
             </li>-->
             
-            <li class="nav-item active" >
-                <a class="nav-link " href="/profile">Profile</a>
+            <li v-if="$store.state.isUserLoggedIn" class="nav-item active" >
+                <router-link v-bind:to="'/profile/'+$store.state.user.id" class="nav-link"><a>Profile</a></router-link>
             </li>
 
         </ul>
-        <ul class="navbar-nav form-inline my-2 my-lg-0">
-            <li class="nav-item active">
-                <a class="nav-link" href="/login">Log in <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="/register">Register <span class="sr-only">(current)</span></a>
+        <ul class="navbar-nav inline my-2 my-lg-0">
+            <div v-if="!$store.state.isUserLoggedIn">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/login">Log in <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/register">Register <span class="sr-only">(current)</span></a>
+                </li>
+            </div>
+            <li v-else @click="logout" class="nav-item active">
+                <a class="nav-link" href="/login">Log out <span class="sr-only">(current)</span></a>
             </li>
         </ul>
         </div>
@@ -37,7 +42,16 @@
 
 <script>
 export default {
-    name: "Header"
+    name: "Header",
+    methods:{
+        logout () {
+            
+            this.$store.dispatch('setToken', null);
+            this.$store.state.isUserLoggedIn = false;
+            this.$store.dispatch('setUser', null);
+            this.$router.push('/');
+        }
+    }
 }
 </script>
 

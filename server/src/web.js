@@ -7,6 +7,7 @@ module.exports = (app) => {
     app.post('/register', userController.register);
     app.post('/login', userController.login);
     app.get('/allUsers', userController.getAllUsers);
+    app.get('/profil/:id', userController.getUser);
     
     app.get('/', topicController.getAllTopics);
     app.get('/topic/:id', topicController.getTopic);

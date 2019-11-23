@@ -42,20 +42,30 @@
 
 <script>
 export default {
-  name: 'login',
-  data: function(){
+    name: 'login',
+    data: function(){
       return {
           form: {
               email: null,
               password: null
-          }
-      }
-  },
-  methods:{
-      submit: function() {
-          axios.post('http://127.0.0.1:8083/login', this.form).then((res) => {
-              console.log(res);
-          })
+            }
+        }
+    },
+    methods:{
+        submit: function() {
+            if(this.form.password.length > 5 && this.form.email.includes('@', 1)){
+                console.log("rade oba");
+            
+                const response = axios.post('http://127.0.0.1:8083/login', this.form).then((res) => {
+                    this.$store.dispatch('setToken', res.data.token);
+                    this.$store.dispatch('setUser', res.data.user);
+                    console.log(this.$store.state.user);
+                    this.$router.push('/profile/'+this.$store.state.user.id);
+                })
+            }
+            else{
+                console.log("Log in invalide");
+            }
         }
   }
 }

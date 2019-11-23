@@ -10,12 +10,13 @@ module.exports = {
                     id: req.params.id
                 }
             });
-            
+
             const comments = await Comment.findAll({
                 where: {
                     postId: req.params.id
                 }
             });
+
             //res.send(post);
             res.send([post,comments]);
         } catch (error) {

@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Post } = require('../models');
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 
@@ -9,7 +9,7 @@ function jwtSignUser (user) {
     const ONE_WEEK =  60 * 60 * 24 * 7;
     return jwt.sign(user, config.authentication.jwtSecret, {
         expiresIn: ONE_WEEK
-    })
+    });
 }
 
 module.exports = {
@@ -43,7 +43,9 @@ module.exports = {
     },
     async login(req, res) {
         try {
+
             const {email, password} = req.body;
+
             const user = await User.findOne({
                 where: {
                     email: email
@@ -58,10 +60,7 @@ module.exports = {
                 })
             }
 
-            //console.log("DA LI OVDE PUCA DA ZNAMO");
-            const isPasswordValid = user.comparePassword(password);
-            
-            
+            const isPasswordValid = user.comparePassword(password);            
 
             if(!isPasswordValid) {
                 return res.status(403).send({
@@ -93,5 +92,27 @@ module.exports = {
             console.log(err);
         }
         
+    },
+    async getUser(req, res) {
+        //console.log("\nOVDE JE\n");
+        try{
+            console.log("\nOVDE JE "+req.params.id+"\n");
+            const user = await User.findOne({
+                where : {
+                    id: req.params.id
+                }
+            });
+
+            const posts = await Post.findAll({
+                where : {
+                    userId: user.id
+                }
+            });
+
+            res.send([user, posts]);
+        }
+        catch(err){
+            console.log(err);
+        }
     }
 }

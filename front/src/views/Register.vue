@@ -65,6 +65,10 @@ export default {
         submit: function() {
             axios.post('http://127.0.0.1:8083/register', this.form).then((res) => {
                 console.log(res);
+                this.$store.dispatch('setToken', res.data.token);
+                    this.$store.dispatch('setUser', res.data.user);
+                    console.log(this.$store.state.user);
+                    this.$router.push('/profile/'+this.$store.state.user.id);
             })
         }
     }
